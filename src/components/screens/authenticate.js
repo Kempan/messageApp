@@ -29,7 +29,7 @@ export default class Authenticate extends React.Component {
       password: 'password'
     }
 
-    this.login(credentials)
+    this.login(this.state.credentials)
   }
 
   updateText(text, field) {
@@ -38,7 +38,6 @@ export default class Authenticate extends React.Component {
     this.setState({
       credentials: newCredentials
     });
-    console.log(this.state.credentials);
   }
 
 

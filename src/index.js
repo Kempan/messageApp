@@ -51,7 +51,7 @@ export default class AppIndex extends React.Component {
   render() {
 
     //change home or authenticate
-    const Switch = rootNav(!this.state.authed);
+    const Switch = rootNav(this.state.authed);
 
     return (
       this.state.authCheck ? <Switch /> : <ActivityIndicator size='large' />

@@ -1,16 +1,32 @@
 import React from 'react';
 import { AsyncStorage, ActivityIndicator } from 'react-native';
-import { Home, Authenticate } from './components/screens/index';
-import { createSwitchNavigator } from 'react-navigation';
+import { Home, Authenticate, Conversation } from './components/screens/index';
+import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
 import config from './config';
+
+const MessageStack = createStackNavigator({
+  home: Home,
+  conversation: Conversation
+}, {
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: 'rgb(162, 55, 243)',
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        color: 'rgb(255,255,255)',
+      },
+      headerTintColor: 'red'
+    }
+  })
 
 const rootNav = (authBool) => {
   return createSwitchNavigator({
+    main: MessageStack,
     auth: Authenticate,
-    home: Home,
   },
     {
-      initialRouteName: (authBool) ? 'home' : 'auth',
+      initialRouteName: (authBool) ? 'main' : 'auth',
     })
 }
 

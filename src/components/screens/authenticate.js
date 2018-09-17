@@ -22,8 +22,6 @@ export default class Authenticate extends React.Component {
 
   componentDidMount() {
 
-    AsyncStorage.getItem(config.userIdKey).then(key => { console.log(key) })
-
     const credentials = {
       email: 'hejsan',
       password: 'password'

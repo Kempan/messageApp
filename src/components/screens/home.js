@@ -1,10 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage } from 'react-native';
-import { Button } from 'react-native-elements';
+import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage, FlatList, StatusBar } from 'react-native';
 import { Message } from '../view';
 import config from '../../config';
 
 export default class Home extends React.Component {
+
+  static navigationOptions = {
+    title: 'Messages'
+  }
 
   constructor(props) {
     super(props);
@@ -45,23 +48,28 @@ export default class Home extends React.Component {
       })
   }
 
+  navigateToConversation(item) {
+    console.log(item.fromUser);
+    this.props.navigation.navigate('conversation', { user: item.fromUser });
+  }
+
   render() {
 
     const { messages } = this.state;
-    const lastIndex = messages.length - 1;
 
     return (
 
       <View style={styles.container}>
 
+        <StatusBar />
         {this.state.showActivityIndicator ? <ActivityIndicator size='large' /> : null}
 
-        {messages.map((message, i) => {
-
-          const last = i === lastIndex;
-          return <Message last={last} {...message} />
-
-        })}
+        <FlatList
+          style={{ width: '100%' }}
+          data={messages}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => <Message {...item} nav={this.navigateToConversation.bind(this, { ...item })} />}
+        />
 
       </View>
 
@@ -71,10 +79,12 @@ export default class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
+    height: '100%',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgb(243,243,243)',
-
+    padding: 10
   },
 });

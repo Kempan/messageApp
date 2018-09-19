@@ -22,7 +22,7 @@ export default class Home extends React.Component {
 
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
-        const query = `?toUser=${key}`;
+        let query = `?toUser=${key}`;
         return fetch(`${config.baseUrl}api/message${query}`, {
           method: 'GET',
           headers: {

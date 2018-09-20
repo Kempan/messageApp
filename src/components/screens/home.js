@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage, FlatList, StatusBar } from 'react-native';
 import { Message } from '../view';
 import config from '../../config';
+import utils from '../../utils';
 
 export default class Home extends React.Component {
 
@@ -20,32 +21,20 @@ export default class Home extends React.Component {
 
   componentDidMount() {
 
-    AsyncStorage.getItem(config.userIdKey)
-      .then(key => {
-        let query = `?toUser=${key}`;
-        return fetch(`${config.baseUrl}api/message${query}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'content-type': 'application/json'
-          }
-        })
-          .then(response => {
-            return response.json();
-          })
-          .then(responseJson => {
-            this.setState({
-              messages: responseJson.data,
-              showActivityIndicator: false
-            })
-          })
-          .catch(err => {
-            console.log(err.message);
-            this.setState({
-              showActivityIndicator: false
-            })
-          })
+    utils.fetchMessages({})
+      .then(responseJson => {
+        this.setState({
+          messages: responseJson.data,
+          showActivityIndicator: false
+        });
       })
+      .catch(err => {
+        console.log('hej');
+        console.log(err.message);
+        this.setState({
+          showActivityIndicator: false
+        });
+      });
   }
 
   navigateToConversation(item) {

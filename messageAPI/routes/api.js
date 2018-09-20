@@ -20,7 +20,7 @@ router.get('/:resource', (req, res) => {
 	if (validResources.indexOf(resource) < 0) {
 		res.json({
 			confirmation: 'fail',
-			message: 'No suck rescource'
+			message: 'No such rescource'
 		});
 		return;
 	}

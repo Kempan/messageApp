@@ -1,12 +1,23 @@
 import config from '../config';
+import { AsyncStorage } from 'react-native';
+
+const queryString = require('query-string');
 
 export default {
-  fetchMessages: (additionalQuaryParams) => {
+  fetchMessages: additionalQuaryParams => {
 
-    AsyncStorage.getItem(config.userIdKey)
+    let params = {};
+
+    Object.keys(additionalQuaryParams).forEach((key, i) => {
+      params[key] = additionalQuaryParams[key];
+    });
+
+    return AsyncStorage.getItem(config.userIdKey)
       .then(key => {
-        let query = `?toUser=${key}`;
-        return fetch(`${config.baseUrl}api/message${query}`, {
+        params.toUser = key;
+        let query = queryString.stringify(params);
+        console.log(query);
+        return fetch(`${config.baseUrl}api/message?${query}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -16,18 +27,6 @@ export default {
           .then(response => {
             return response.json();
           })
-          .then(responseJson => {
-            this.setState({
-              messages: responseJson.data,
-              showActivityIndicator: false
-            })
-          })
-          .catch(err => {
-            console.log(err.message);
-            this.setState({
-              showActivityIndicator: false
-            })
-          })
-      })
+      });
   },
-}
+};

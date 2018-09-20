@@ -1,8 +1,19 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
+import Message from '../view/message';
 import config from '../../config';
+import utils from '../../utils';
 
 export default class Conversation extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      messages: [],
+      showActivityIndicator: true
+    }
+  }
 
   static navigationOptions = ({ navigation }) => {
     const params = navigation.state.params || {};
@@ -19,19 +30,15 @@ export default class Conversation extends React.Component {
     });
 
     //Fetch conversation with user
-    const query = `?fromUser=${user}`;
-    fetch(`${config.baseUrl}api/message${query}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'content-type': 'application/json'
-      }
-    })
-      .then(response => {
-        return response.json()
-      })
+    // const query = `?fromUser=${user}`;
+    // const url = `${config.baseUrl}api/message${query}`;
+    utils.fetchMessages({ fromUser: user })
       .then(responseJson => {
-        console.log(responseJson)
+        console.log(responseJson);
+        this.setState({
+          messages: responseJson.data,
+          showActivityIndicator: false
+        })
       })
       .catch(err => {
         console.log(err);
@@ -41,12 +48,18 @@ export default class Conversation extends React.Component {
   render() {
 
     return (
-      <View><Text>TEST</Text></View>
+      <View style={styles.container}>
+        {this.state.messages.map((message, i) => {
+          return <Message {...message} />;
+        })}
+      </View>
     )
 
   }
 }
 
 const styles = StyleSheet.create({
-
+  container: {
+    padding: 10
+  }
 });

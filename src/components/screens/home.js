@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage, FlatList, StatusBar } from 'react-native';
-import { Message } from '../view';
+import { Message, MessageShort } from '../view';
 import config from '../../config';
 import utils from '../../utils';
 
@@ -29,7 +29,6 @@ export default class Home extends React.Component {
         });
       })
       .catch(err => {
-        console.log('hej');
         console.log(err.message);
         this.setState({
           showActivityIndicator: false

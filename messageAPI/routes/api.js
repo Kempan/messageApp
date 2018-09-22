@@ -41,6 +41,29 @@ router.get('/:resource', (req, res) => {
 		})
 });
 
+router.get('/message/me', (req, res) => {
+	const { resource } = req.params;
+	const { query } = req;
+
+	const data = [];
+
+	turbo.fetch(resource, query)
+		.then(data => {
+			res.json({
+				confirmation: 'success',
+				data: data
+			});
+			return;
+		}).catch(err => {
+			console.log(err)
+			res.json({
+				confirmation: 'fail',
+				message: err.message
+			});
+			return;
+		})
+});
+
 router.get('/:resource/:id', (req, res) => {
 	res.json({
 		confirmation: 'success',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
-import Message from '../view/message';
+import { Message, MessageShort } from '../view';
 import config from '../../config';
 import utils from '../../utils';
 
@@ -49,8 +49,8 @@ export default class Conversation extends React.Component {
 
     return (
       <View style={styles.container}>
-        {this.state.messages.map((message, i) => {
-          return <Message {...message} />;
+        {this.state.messages.map((message, key) => {
+          return <MessageShort key={key} {...message} />;
         })}
       </View>
     )
@@ -60,6 +60,7 @@ export default class Conversation extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 10
   }
 });

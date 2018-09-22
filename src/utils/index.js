@@ -14,7 +14,10 @@ export default {
 
     return AsyncStorage.getItem(config.userIdKey)
       .then(key => {
+
+        //<----TAR FRAM ALLA MEDDELANDEN FRÅN DATABASEN----->
         params.toUser = key;
+
         let query = queryString.stringify(params);
         console.log(query);
         return fetch(`${config.baseUrl}api/message?${query}`, {

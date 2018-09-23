@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Message, MessageShort } from '../view';
-import config from '../../config';
 import utils from '../../utils';
 
 export default class Conversation extends React.Component {
@@ -24,17 +23,15 @@ export default class Conversation extends React.Component {
 
   componentDidMount() {
 
+    // USER = THE RECIEVER IN CONVERSATION
     const { user } = this.props.navigation.state.params;
     this.props.navigation.setParams({
       currentConversation: user
     });
 
-    //Fetch conversation with user
-    // const query = `?fromUser=${user}`;
-    // const url = `${config.baseUrl}api/message${query}`;
-    utils.fetchMessages({ fromUser: user })
+    //Fetch conversation with user, function in utils
+    utils.fetchMessages('message/me', { fromUser: user })
       .then(responseJson => {
-        console.log(responseJson);
         this.setState({
           messages: responseJson.data,
           showActivityIndicator: false
@@ -50,7 +47,15 @@ export default class Conversation extends React.Component {
     return (
       <View style={styles.container}>
         {this.state.messages.map((message, key) => {
-          return <MessageShort key={key} {...message} />;
+
+          const sentMessage = message.fromUser === this.props.navigation.state.params.user;
+
+          return <MessageShort
+            sentMessage={sentMessage}
+            key={key}
+            {...message}
+          />;
+
         })}
       </View>
     )

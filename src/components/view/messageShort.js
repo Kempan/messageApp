@@ -5,9 +5,14 @@ const MessageShort = props => {
 
   const profilUri = 'https://lh3.googleusercontent.com/gKeTaztl9x0EgVC0BeGsTrU2rxgRqJZ2SAZmECxChSpGpIMHQitPMCzrlWoN91pvpQgr8-oD4iRhN3EDVHoyLOtnqYY';
 
+  //Changing side of conversation depending on sender of message
+  const containerStyle = [styles.container];
+  const dir = !props.sentMessage ? { flexDirection: 'row' } : { flexDirection: 'row-reverse' };
+  containerStyle.push(dir);
+
   return (
 
-    <View style={styles.container}>
+    <View style={containerStyle}>
 
       <View style={styles.userContainer}>
         <Image
@@ -19,7 +24,7 @@ const MessageShort = props => {
 
       <View style={styles.messageContainer}>
 
-        <Text style={styles.messageText}>Det är ett välkänt faktum</Text>
+        <Text style={styles.messageText}>{props.message}</Text>
 
       </View>
 
@@ -29,16 +34,15 @@ const MessageShort = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     alignItems: 'center',
     paddingRight: 70,
-    paddingLeft: 10,
     marginBottom: 10,
   },
   userContainer: {
     alignItems: 'center',
     width: 50,
-    marginRight: 10
+    marginHorizontal: 10
   },
   messageContainer: {
     borderColor: 'rgb(225,225,225)',

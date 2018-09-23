@@ -21,7 +21,7 @@ export default class Home extends React.Component {
 
   componentDidMount() {
 
-    utils.fetchMessages({})
+    utils.fetchMessages('message', {})
       .then(responseJson => {
         this.setState({
           messages: responseJson.data,
@@ -36,8 +36,8 @@ export default class Home extends React.Component {
       });
   }
 
+  // ITEM.fromUser = Message.fromUser
   navigateToConversation(item) {
-    console.log(item.fromUser);
     this.props.navigation.navigate('conversation', { user: item.fromUser });
   }
 

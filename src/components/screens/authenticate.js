@@ -66,7 +66,7 @@ export default class Authenticate extends React.Component {
         <View style={styles.formContainer}>
 
           <Text h1 style={{ marginBottom: 20, marginLeft: 16, color: 'white' }}>Log in</Text>
-          <FormLabel labelStyle={{ color: 'black' }}>EMAIL ADSRESS</FormLabel>
+          <FormLabel labelStyle={{ color: 'black' }}>EMAIL ADDRESS</FormLabel>
           <FormInput
             containerStyle={styles.input}
             value={this.state.email}

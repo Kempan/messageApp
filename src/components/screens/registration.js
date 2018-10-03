@@ -16,21 +16,19 @@ export default class Registration extends React.Component {
       }
     }
 
+    this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
-  updateText() {
-
+  updateText(text, field) {
+    let newCredentials = Object.assign(this.state.credentials);
+    newCredentials[field] = text;
+    this.setState({
+      credentials: newCredentials
+    });
   }
 
-  componentDidMount() {
-
-    const turbo = Turbo({ site_id: config.turboAppId });
-    const credentials = {
-      email: 'hejsan',
-      password: 'password'
-    };
-
-    turbo.createUser(credentials)
+  register() {
+    this.turbo.createUser(credentials)
       .then(resp => {
         console.log(JSON.stringify(resp));
       })

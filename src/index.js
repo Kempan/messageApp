@@ -1,8 +1,9 @@
 import React from 'react';
 import { AsyncStorage, ActivityIndicator } from 'react-native';
-import { Home, Authenticate, Conversation } from './components/screens/index';
-import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
+import { Home, Authenticate, Conversation, Profil } from './components/screens/index';
+import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import config from './config';
+import Colors from './styles/Colors';
 
 const MessageStack = createStackNavigator({
   home: Home,
@@ -10,19 +11,24 @@ const MessageStack = createStackNavigator({
 }, {
     navigationOptions: {
       headerStyle: {
-        backgroundColor: 'rgb(162, 55, 243)',
+        backgroundColor: Colors.white,
       },
       headerTitleStyle: {
         fontWeight: 'bold',
-        color: 'rgb(255,255,255)',
+        color: Colors.purple,
       },
       headerTintColor: 'red'
     }
   })
 
+const MainAppTabs = createBottomTabNavigator({
+  Messages: MessageStack,
+  Profil: Profil
+})
+
 const rootNav = (authBool) => {
   return createSwitchNavigator({
-    main: MessageStack,
+    main: MainAppTabs,
     auth: Authenticate,
   },
     {

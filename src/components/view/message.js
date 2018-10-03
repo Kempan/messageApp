@@ -8,7 +8,6 @@ const Message = props => {
   // if (props.last) {
   //   style.push({ borderBottomWidth: StyleSheet.hairlineWidth })
   // }
-
   const profilUri = 'https://lh3.googleusercontent.com/gKeTaztl9x0EgVC0BeGsTrU2rxgRqJZ2SAZmECxChSpGpIMHQitPMCzrlWoN91pvpQgr8-oD4iRhN3EDVHoyLOtnqYY';
 
   return (

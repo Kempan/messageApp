@@ -3,7 +3,7 @@ const turbo = require('turbo360')({ site_id: process.env.TURBO_APP_ID })
 const vertex = require('vertex360')({ site_id: process.env.TURBO_APP_ID })
 const router = vertex.router()
 
-/*  This is a sample API route. */
+//  FETCH ALL MESSAGES 
 
 const validResources = [
 	'message'
@@ -70,6 +70,8 @@ router.get('/:resource', (req, res) => {
 	// })
 
 });
+
+// FETCH CONVERSATION MESSAGES
 
 router.get('/message/me', (req, res) => {
 

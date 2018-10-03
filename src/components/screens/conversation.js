@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { Message, MessageShort } from '../view';
+import Colors from '../../styles/Colors';
 import utils from '../../utils';
 
 export default class Conversation extends React.Component {
@@ -22,7 +23,6 @@ export default class Conversation extends React.Component {
   }
 
   componentDidMount() {
-
     // USER = THE RECIEVER IN CONVERSATION
     const { user } = this.props.navigation.state.params;
     this.props.navigation.setParams({
@@ -46,17 +46,22 @@ export default class Conversation extends React.Component {
 
     return (
       <View style={styles.container}>
-        {this.state.messages.map((message, key) => {
 
-          const sentMessage = message.fromUser === this.props.navigation.state.params.user;
+        {this.state.showActivityIndicator ? <ActivityIndicator size='large' /> : null}
 
-          return <MessageShort
-            sentMessage={sentMessage}
-            key={key}
-            {...message}
-          />;
+        <FlatList
+          data={this.state.messages}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <MessageShort
+              sentMessage={
+                item.fromUser === this.props.navigation.state.params.user
+              }
+              {...item}
+            />
+          )}
+        />
 
-        })}
       </View>
     )
 
@@ -66,6 +71,7 @@ export default class Conversation extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10
+    padding: 10,
+    backgroundColor: Colors.purple
   }
 });

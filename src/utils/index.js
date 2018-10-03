@@ -17,9 +17,8 @@ export default {
 
         //<----TAR FRAM ALLA MEDDELANDEN FRÅN DATABASEN----->
         params.toUser = key;
-
         let query = queryString.stringify(params);
-        console.log(query);
+        console.log(query)
         return fetch(`${config.baseUrl}api/${endpoint}?${query}`, {
           method: 'GET',
           headers: {

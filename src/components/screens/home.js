@@ -1,27 +1,45 @@
 import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage, FlatList, StatusBar } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, FlatList, StatusBar, Modal, TouchableOpacity, Image, Text } from 'react-native';
 import { Message } from '../view';
-import config from '../../config';
+import Colors from '../../styles/Colors';
 import utils from '../../utils';
+import { Images } from '../../resources/images';
 
 export default class Home extends React.Component {
 
-  static navigationOptions = {
-    title: 'Messages'
-  }
+  static navigationOptions = ({ navigation }) => {
+    const params = navigation.state.params || {};
+    return {
+      title: 'Messages',
+      headerRight: params.showIcon ? (
+        <TouchableOpacity onPress={params.createMessage}>
+          <Image source={Images.createMessage} style={{ height: 50, width: 50, marginRight: 6 }} />
+        </TouchableOpacity>
+      ) : null
+    };
+  };
 
   constructor(props) {
     super(props);
 
     this.state = {
       showActivityIndicator: true,
+      showMessage: false,
       messages: []
     }
+
+    this.createMessage = this.createMessage.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.navigation.setParams({
+      createMessage: this.createMessage,
+      showIcon: !this.state.showMessage
+    });
   }
 
   componentDidMount() {
-
-    utils.fetchMessages({})
+    utils.fetchMessages('message', {})
       .then(responseJson => {
         this.setState({
           messages: responseJson.data,
@@ -29,7 +47,6 @@ export default class Home extends React.Component {
         });
       })
       .catch(err => {
-        console.log('hej');
         console.log(err.message);
         this.setState({
           showActivityIndicator: false
@@ -37,9 +54,17 @@ export default class Home extends React.Component {
       });
   }
 
+  // ITEM.fromUser = Message.fromUser
   navigateToConversation(item) {
-    console.log(item.fromUser);
     this.props.navigation.navigate('conversation', { user: item.fromUser });
+  }
+
+  createMessage() {
+    this.setState({ showMessage: !this.state.showMessage }, () => {
+      this.props.navigation.setParams({
+        showIcon: !this.state.showMessage
+      });
+    });
   }
 
   render() {
@@ -49,7 +74,16 @@ export default class Home extends React.Component {
     return (
 
       <View style={styles.container}>
-
+        <Modal
+          visible={this.state.showMessage}
+          transparent={true}
+          animationType='slide'
+          onRequestClose={() => { this.createMessage() }}
+        >
+          <View style={styles.modalContainer}>
+            <Text>Hej</Text>
+          </View>
+        </Modal>
         <StatusBar />
         {this.state.showActivityIndicator ? <ActivityIndicator size='large' /> : null}
 
@@ -73,7 +107,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgb(243,243,243)',
+    backgroundColor: Colors.purple,
     padding: 10
   },
+  modalContainer: {
+    backgroundColor: 'red',
+    marginTop: 50,
+    height: '100%',
+    width: '100%'
+  }
 });

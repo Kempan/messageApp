@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 const queryString = require('query-string');
 
 export default {
-  fetchMessages: additionalQuaryParams => {
+  fetchMessages: (endpoint, additionalQuaryParams) => {
 
     let params = {};
 
@@ -14,10 +14,12 @@ export default {
 
     return AsyncStorage.getItem(config.userIdKey)
       .then(key => {
+
+        //<----TAR FRAM ALLA MEDDELANDEN FRÅN DATABASEN----->
         params.toUser = key;
         let query = queryString.stringify(params);
-        console.log(query);
-        return fetch(`${config.baseUrl}api/message?${query}`, {
+        console.log(query)
+        return fetch(`${config.baseUrl}api/${endpoint}?${query}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',

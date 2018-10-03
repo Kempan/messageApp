@@ -3,7 +3,7 @@ const turbo = require('turbo360')({ site_id: process.env.TURBO_APP_ID })
 const vertex = require('vertex360')({ site_id: process.env.TURBO_APP_ID })
 const router = vertex.router()
 
-/*  This is a sample API route. */
+//  FETCH ALL MESSAGES 
 
 const validResources = [
 	'message'
@@ -12,11 +12,7 @@ const validResources = [
 router.get('/:resource', (req, res) => {
 	const { resource } = req.params;
 	const { query } = req;
-	// res.json({
-	// 	confirmation: 'success',
-	// 	resource: req.params.resource,
-	// 	query: req.query // from the url query string
-	// })
+
 	if (validResources.indexOf(resource) < 0) {
 		res.json({
 			confirmation: 'fail',
@@ -39,16 +35,94 @@ router.get('/:resource', (req, res) => {
 			});
 			return;
 		})
+
+	// ------ADD MESSAGES TO DATASTORE--------
+
+	// const messages = [
+	// 	{
+	// 		toUser: 'Lisa',
+	// 		fromUser: '5b9a33a162896000149179cf',
+	// 		message: 'asfiaosfnaosf aspiffaspif apfsi a piafapif naifn paifn painfapfi napfiasf a sf asf asf',
+	// 		dateTime: new Date()
+	// 	},
+	// 	{
+	// 		toUser: 'Lisa',
+	// 		fromUser: '5b9a33a162896000149179cf',
+	// 		message: 'asfiaosfnaosf aspiffaspif apfsi a piafapif naifn pai',
+	// 		dateTime: new Date()
+	// 	},
+	// 	{
+	// 		toUser: '5b9a33a162896000149179cf',
+	// 		fromUser: 'Lisa',
+	// 		message: 'asfiaosfnaosf aspiffaspif apfsi a piafapif naifn paifn painfapfi napfi asff af af sasd',
+	// 		dateTime: new Date()
+	// 	},
+	// 	{
+	// 		toUser: '5b9a33a162896000149179cf',
+	// 		fromUser: 'Lisa',
+	// 		message: 'asfiaosfnaosf aspiffaspif apfsi a piafapif naifn paia',
+	// 		dateTime: new Date()
+	// 	},
+	// ]
+
+	// messages.forEach((message, key) => {
+	// 	turbo.create('message', message)
+	// })
+
 });
 
-router.get('/:resource/:id', (req, res) => {
-	res.json({
-		confirmation: 'success',
-		resource: req.params.resource,
-		id: req.params.id,
-		query: req.query // from the url query string
-	})
-})
+// FETCH CONVERSATION MESSAGES
+
+router.get('/message/me', (req, res) => {
+
+	const resource = 'message';
+	const { query } = req;
+
+	const messages = [];
+
+	const first = {
+		toUser: query.toUser,
+		fromUser: query.fromUser
+	}
+	const second = {
+		fromUser: query.toUser,
+		toUser: query.fromUser
+	}
+
+	turbo.fetch(resource, first)
+		.then(data => {
+			data.forEach((mes, key) => {
+				messages.push(mes)
+			});
+			return turbo.fetch(resource, second);
+		})
+		.then(data => {
+			data.forEach((mes, key) => {
+				messages.push(mes);
+			});
+			res.json({
+				confirmation: 'success',
+				data: messages
+			});
+		})
+		.catch(err => {
+			console.log(err)
+			res.json({
+				confirmation: 'hej',
+				message: err.message
+			});
+			return;
+		})
+});
+
+// router.get('/:resource/:id', (req, res) => {
+// 	res.json({
+// 		confirmation: 'success',
+// 		resource: req.params.resource,
+// 		id: req.params.id,
+// 		query: req.query // from the url query string
+// 	})
+// })
 
 
 

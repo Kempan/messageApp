@@ -31,4 +31,31 @@ export default {
           })
       });
   },
+
+  createMessages: (additionalParams) => {
+
+    let params = {};
+
+    Object.keys(additionalParams).forEach((key, i) => {
+      params[key] = additionalParams[key];
+    });
+
+    return AsyncStorage.getItem(config.userIdKey)
+      .then(key => {
+        params.fromUser = key;
+        let query = queryString.stringify(params);
+        console.log(query)
+        return fetch(`${config.baseUrl}api/message`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(params)
+        })
+          .then(response => {
+            return response.json();
+          })
+      });
+  },
 };

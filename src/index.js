@@ -1,13 +1,14 @@
 import React from 'react';
-import { AsyncStorage, ActivityIndicator } from 'react-native';
+import { AsyncStorage, ActivityIndicator, Image } from 'react-native';
 import { Home, Authenticate, Conversation, Profil } from './components/screens/index';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import config from './config';
 import Colors from './styles/Colors';
+import { Images } from './resources/images';
 
 const MessageStack = createStackNavigator({
   home: Home,
-  conversation: Conversation
+  conversation: Conversation,
 }, {
     navigationOptions: {
       headerStyle: {
@@ -24,7 +25,26 @@ const MessageStack = createStackNavigator({
 const MainAppTabs = createBottomTabNavigator({
   Messages: MessageStack,
   Profil: Profil
-})
+},
+  {
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Messages') {
+          iconName = Images.message;
+        } else if (routeName === 'Profil') {
+          iconName = Images.user;
+        }
+
+        return <Image source={iconName} style={{ height: 30, width: 30 }} />;
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: Colors.purple,
+      inactiveTintColor: 'grey'
+    }
+  })
 
 const rootNav = (authBool) => {
   return createSwitchNavigator({

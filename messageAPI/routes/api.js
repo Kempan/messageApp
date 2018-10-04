@@ -3,8 +3,29 @@ const turbo = require('turbo360')({ site_id: process.env.TURBO_APP_ID })
 const vertex = require('vertex360')({ site_id: process.env.TURBO_APP_ID })
 const router = vertex.router()
 
-//  FETCH ALL MESSAGES 
 
+//  SKAPAR NYTT MEDDELANDE
+router.post('/message', (req, res) => {
+	console.log(req.body)
+	turbo.create('message', req.body)
+		.then(data => {
+			res.json({
+				confirmation: 'success',
+				data: data
+			})
+			return;
+		})
+		.catch(err => {
+			res.json({
+				confirmation: 'fail',
+				message: err.message
+			})
+			return;
+		})
+})
+
+
+//  FETCHA ALLA MEDDELANDEN
 const validResources = [
 	'message'
 ];
@@ -71,8 +92,8 @@ router.get('/:resource', (req, res) => {
 
 });
 
-// FETCH CONVERSATION MESSAGES
 
+// FETCH CONVERSATION MESSAGES
 router.get('/message/me', (req, res) => {
 
 	const resource = 'message';

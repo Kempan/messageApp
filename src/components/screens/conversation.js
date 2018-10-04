@@ -44,13 +44,16 @@ export default class Conversation extends React.Component {
 
   render() {
 
+    // SORTERA MEDDELANDEN EFTER TIMESTAMP
+    let sortedMessages = this.state.messages.sort((a, b) => new Date(...a.timestamp.split('/').reverse()) - new Date(...b.timestamp.split('/').reverse()));
+
     return (
       <View style={styles.container}>
 
         {this.state.showActivityIndicator ? <ActivityIndicator size='large' /> : null}
 
         <FlatList
-          data={this.state.messages}
+          data={sortedMessages}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <MessageShort

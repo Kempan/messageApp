@@ -7,14 +7,17 @@ const MessageShort = props => {
 
   //Changing side of conversation depending on sender of message
   const containerStyle = [styles.container];
-  const dir = !props.sentMessage ? { flexDirection: 'row' } : { flexDirection: 'row-reverse' };
-  containerStyle.push(dir);
+  const userContainerStyle = [styles.userContainer];
+  const reverseMessageSides = !props.sentMessage ? { flexDirection: 'row' } : { flexDirection: 'row-reverse' };
+  const pictureMargin = !props.sentMessage ? { marginRight: 10 } : { marginLeft: 10 };
+  containerStyle.push(reverseMessageSides);
+  userContainerStyle.push(pictureMargin);
 
   return (
 
     <View style={containerStyle}>
 
-      <View style={styles.userContainer}>
+      <View style={userContainerStyle}>
         <Image
           source={{ uri: profilUri }}
           style={styles.profilPic}
@@ -42,7 +45,6 @@ const styles = StyleSheet.create({
   userContainer: {
     alignItems: 'center',
     width: 50,
-    marginHorizontal: 10
   },
   messageContainer: {
     borderColor: 'rgb(225,225,225)',
@@ -50,7 +52,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     justifyContent: 'center',
-    padding: 15
+    padding: 15,
+    maxWidth: 270
   },
   profilPic: {
     height: 50,

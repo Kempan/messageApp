@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, ActivityIndicator, FlatList, StatusBar, Modal, TouchableOpacity, Image, Text, TextInput } from 'react-native';
+import { Header } from 'react-navigation';
 import { Message } from '../view';
 import Colors from '../../styles/Colors';
 import utils from '../../utils';
@@ -45,6 +46,7 @@ export default class Home extends React.Component {
   componentDidMount() {
     utils.fetchMessages('message', {})
       .then(responseJson => {
+        utils.sortedMessages(responseJson.data);
         this.setState({
           messages: responseJson.data,
           showActivityIndicator: false
@@ -82,9 +84,9 @@ export default class Home extends React.Component {
   sendMessage() {
     let params = this.state.newMessage;
     utils.createMessages(params)
-      .then(resp => {
-        console.log(JSON.stringify(resp));
+      .then(data => {
         this.createMessage();
+        this.navigateToConversation(data);
       })
       .catch(err => {
         console.log(err);
@@ -179,7 +181,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    marginTop: 50,
+    marginTop: Header.HEIGHT,
     flexDirection: 'column',
     alignItems: 'center',
   },

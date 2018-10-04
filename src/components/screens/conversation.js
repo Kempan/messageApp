@@ -29,11 +29,12 @@ export default class Conversation extends React.Component {
       currentConversation: user
     });
 
-    //Fetch conversation with user, function in utils
+    //Fetch conversation with user
     utils.fetchMessages('message/me', { fromUser: user })
       .then(responseJson => {
+        const sortedMessages = utils.sortedMessages(responseJson.data)
         this.setState({
-          messages: responseJson.data,
+          messages: sortedMessages,
           showActivityIndicator: false
         })
       })
@@ -44,16 +45,13 @@ export default class Conversation extends React.Component {
 
   render() {
 
-    // SORTERA MEDDELANDEN EFTER TIMESTAMP
-    let sortedMessages = this.state.messages.sort((a, b) => new Date(...a.timestamp.split('/').reverse()) - new Date(...b.timestamp.split('/').reverse()));
-
     return (
       <View style={styles.container}>
 
         {this.state.showActivityIndicator ? <ActivityIndicator size='large' /> : null}
 
         <FlatList
-          data={sortedMessages}
+          data={this.state.messages}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <MessageShort

@@ -58,4 +58,9 @@ export default {
           })
       });
   },
+
+  sortedMessages: (arrayOfMessages) => {
+    arrayOfMessages.sort((a, b) => { return new Date(a.timestamp) - new Date(b.timestamp) });
+    return arrayOfMessages;
+  }
 };
